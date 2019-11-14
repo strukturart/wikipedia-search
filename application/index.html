@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<title>Translator</title>
+	<meta http-equiv="Content-Security-Policy" content="default-src https://en.wikipedia.org/* 'self'">
+
+
+
+
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+	<link rel="stylesheet" href="assets/css/main.css"/>
+	<link rel="stylesheet" href="assets/css/grid.css"/>
+
+
+
+</head>
+<body>
+
+	<div id="wrapper">
+
+
+		<div id="intro" class="flex width-100 height-100">
+			<div></div>
+		</div>
+			
+
+		<!---------------->
+		<!--menu-->
+		<!---------------->
+		<div id="finder" class="flex width-100 height-100">
+			<div>With which language do you want to search ?</div>
+			<ul id="item-list">
+				<li tabindex="0" data-lang="en">english</li>
+				<li tabindex="1" data-lang="de">deutsch</li>
+				<li tabindex="2" data-lang="fr">français</li>
+				<li tabindex="3" data-lang="pt">português</li>
+			</ul>
+		</div>
+
+
+
+
+
+		<!---------------->
+		<!--Main---------->
+		<!---------------->
+
+		<div id="main" class="width-100">
+			<div id="top-bar" class="flex justify-content-end">
+				
+			</div>
+			<form onsubmit="return false;" class="flex justify-content-center" id="translate-input" >
+				<input type="text" name="translate-input" placeholder="search">
+			</form>
+			<div id="result">
+			</div>
+			<div id="bottom-bar" class="flex justify-content-spacebetween">
+				<div id="buttlon-left">search</div>
+				<div id="button-right">language</div>
+			</div>
+		</div>
+
+			
+		
+
+
+
+
+	</div>
+
+</body>
+</html>
+
+	<script defer src="assets/js/jQuery-3.1.0.js"></script>
+	<script defer src="assets/js/moments.min.js"></script>
+	<script defer src="assets/js/applait.finder.min.js"></script>
+	<script defer src="assets/js/script.js"></script>
+
