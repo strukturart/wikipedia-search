@@ -19,18 +19,21 @@ With this app you can search within wikipedia
 ## How to use
 
 
-- Select your language
 - Soft-Left new search
-- Soft-Right switch language
 - Enter submit your search
-
+- Search-result-list: navigation with the cursor up/down and enter to select the article
+- Article: Backspace to come back to the search-result-list
 
 ## To do
+
+- all languages
+- autocomplete 
 
 
 ## Dependencies
 
-https://jquery.com/
+- https://jquery.com/
+- https://github.com/devbridge/jQuery-Autocomplete
 
 ## Thank you
 

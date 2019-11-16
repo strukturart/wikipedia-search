@@ -38,6 +38,9 @@
 				<li tabindex="2" data-lang="fr">français</li>
 				<li tabindex="3" data-lang="pt">português</li>
 			</ul>
+			<div id="bottom-bar" class="flex justify-content-center width-100">
+				<div></div>
+			</div>
 		</div>
 
 
@@ -49,17 +52,15 @@
 		<!---------------->
 
 		<div id="main" class="width-100">
-			<div id="top-bar" class="flex justify-content-end">
-				
-			</div>
-			<form onsubmit="return false;" class="flex justify-content-center" id="translate-input" >
-				<input type="text" name="translate-input" placeholder="search">
+			<form class="flex justify-content-center" id="search-form">
+				<input required type="text"  placeholder="search" id="search">
 			</form>
 			<div id="result">
 			</div>
 			<div id="bottom-bar" class="flex justify-content-spacebetween">
-				<div id="buttlon-left">search</div>
-				<div id="button-right">language</div>
+				<div id="button-left">&#128270;</div>
+				<div id="button-right"></div>
+				
 			</div>
 		</div>
 
@@ -78,4 +79,5 @@
 	<script defer src="assets/js/moments.min.js"></script>
 	<script defer src="assets/js/applait.finder.min.js"></script>
 	<script defer src="assets/js/script.js"></script>
+	<script defer src="assets/js/jquery.autocomplete.min.js"></script>
 

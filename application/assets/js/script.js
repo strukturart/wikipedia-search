@@ -19,8 +19,7 @@ $(document).ready(function()
 	var items = 0;
 	var lang;
 
-	var api_url = "https://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="
-
+	var request_url;
 
 
 ////////////////////
@@ -71,6 +70,7 @@ function showFinder()
 	$("div#main").css("display","none")
 	window_stat = "finder"
 	set_tabindex()
+	pos_focus = 0;
 
 }
 
@@ -78,18 +78,29 @@ showFinder()
 
 function showMain()
 {
-	
+	pos_focus = 0;
 	$("div#finder").css("display","none")
 	$("div#main").css("display","block")
-	window_stat = "main"
 	$("div#main input").focus();
+	setTimeout(
+	  function() 
+	  {
+	    	window_stat = "main"
+
+	  }, 1000);
+
 	
 }
 
 function newsearch()
 {
+	$("form").show()
 	$("form input").focus()
 	$("div#result").empty()
+	pos_focus = 0
+	$("div#bottom-bar div#button-right").text(pos_focus+" / "+items-1)
+
+
 }
 
 
@@ -102,24 +113,30 @@ function newsearch()
 
 	function nav (move) {
 
-		
+
 		if(move == "+1")
 		{
 			pos_focus++
 
 
-			if(pos_focus <= items.length)
+			if(pos_focus <= items)
 			{
 
 				$('li[tabindex='+pos_focus+']').focus()
+				$('article[tabindex='+pos_focus+']').focus()
+				
+   
+			    $('html, body').animate({
+			        scrollTop: $(':focus').offset().top + 'px'
+			    }, 'fast');
+
 			}	
 
-			if( pos_focus == items.length)
+			if(pos_focus > items)
 			{
 				pos_focus = 0;
 				$('li[tabindex=0]').focus()
-
-				  
+				$('article[tabindex=0]').focus()
 			}
 
 
@@ -132,18 +149,24 @@ function newsearch()
 			{
 				
 				$('li[tabindex='+pos_focus+']').focus()
+				$('article[tabindex='+pos_focus+']').focus()
+
+				$('html, body').animate({
+				scrollTop: $(':focus').offset().top + 'px'
+				}, 'fast');
 
 			}
 
 			if(pos_focus == -1)
 			{
-				pos_focus = items.length-1;
+				pos_focus = items;
 				
 				$('li[tabindex='+pos_focus+']').focus()
 
 			}
 		}
 
+		//$("div#bottom-bar div#button-right").text(pos_focus+" / "+items)
 
 	}
 
@@ -151,8 +174,8 @@ function newsearch()
 
 function set_tabindex()
 {
-		items = $('div#finder ul > li');
-		for(var i =0; i < items.length; i++)
+		items = $('div#finder ul > li').length-1;
+		for(var i =0; i < items; i++)
 		{
 			$(items[i]).attr('tabindex',i) 
 			pos_focus = 0
@@ -163,119 +186,151 @@ function set_tabindex()
 
 
 
-
-
-
-
-
-
-
-
-
-
 ////////////////////
-////GEOLOCATION/////
+////select/////
 ///////////////////
 
 function select_language()
 {
 	if(window_stat == "finder")
 	{
-	
-
-	var selected_button = $(":focus")[0];
-	lang = selected_button.getAttribute('data-lang');
-	//alert(lang)
-
-	api_url = "https://"+lang+".wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="
-
-	showMain();
+		var selected_button = $(":focus")[0];
+		lang = selected_button.getAttribute('data-lang');
+		showMain();
 	}
-	
-
-
 	
 }
 
 
 
 
+$('#search').autocomplete({
+    //lookup: countries,
+    serviceUrl: 'https://gist.githubusercontent.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_hash.json',
+    minChars:1,
+    triggerSelectOnValidInput: false,
+    lookupLimit: 5,
+    onSearchStart: function()
+    {
+    	//alert("search start")
+    },
+    onSearchError: function (query, jqXHR, textStatus, errorThrown) 
+    {
+    	//alert(textStatus)
+    },
+    onSelect: function (suggestion) {
+        //alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
+    }
+});
 
 
-function sendRequest(search_term)
+
+///////////////////
+//AJAX REQUESTS///
+/////////////////
+
+function sendRequest(search_term,request_source)
 {
 	if(window_stat == "main")
 	{  
+		if(request_source == "search")
+		{
+			request_url = "https://"+lang+".wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="+search_term
+
+		}
+
+		if(request_source == "article")
+		{
+			request_url = "https://"+lang+".wikipedia.org/w/api.php?format=json&action=query&pageids="+search_term+"&prop=extracts&exlimit=max&explaintext&exintro"
+
+		}
 
 		$("div#result").empty()
  
-
-
-	
-
 		var xhttp = new XMLHttpRequest({ mozSystem: true });
 
-		xhttp.open('GET',api_url+search_term,true)
+		xhttp.open('GET',request_url,true);
 		xhttp.withCredentials = true;
 		
-
-
-
-
-
-		xhttp.onload = function () {
+		xhttp.onload = function () 
+		{
 			
 			if (xhttp.readyState === xhttp.DONE && xhttp.status === 200) 
 			{
-				
 				var data = xhttp.response;
-
 				var obj = jQuery.parseJSON(data);
-
-				$.each(obj.query.search, function(i, item) {
-
-					$("div#result").append("<article>");
-				    $("div#result").append("<h1>"+item.title+"</h1>");
-				     $("div#result").append("<div class='snippet'>"+item.snippet+"</div>");
-				     $("div#result").append("</article>");
-				     $("div#result:first-child").focus()
-				     $("div#main input").blur();
-					
-				});
-				$("form input").val("")
 				
-
-			}
-
-			if (xhttp.status === 404) 
-			{
-				alert("Url not found");
-			}
-
-			////Redirection
-			if (xhttp.status === 301) 
-			{
-				if(param_redirect != true)
+				if(request_source == "search")
 				{
-				
+
+					if(obj.query.searchinfo.totalhits == 0)
+					{
+						var article = "<article id='noresults'>no results</article>";
+						$("div#result").append(article);
+						return false;
+
+					}
+					var k = -1;
+					$.each(obj.query.search, function(i, item) {
+						k++
+						var article = "<article data-id="+item.pageid+" tabindex="+k+"><h1>"+item.title+"</h1><div class='snippet'>"+item.snippet+"</div></article>"
+						$("div#result").append(article);
+
+						$("div#main input").blur();
+						$('div#main div#result').find("article:first").focus()
+
+
+						items = $("div#result article").length-1
+						pos_focus = 0
+						$("form").hide()
+
+						//$("div#bottom-bar div#button-right").text(pos_focus+" / "+items)
+
+					
+					 });
+
 				}
 
-				if(param_redirect == true)
+				if(request_source == "article")
 				{
-				
-					
+					var k = -1;
+					$.each(obj.query.pages, function(i, item) {
+						k++
+									
+						var article = "<article><h1>"+item.title+"</h1><div class='snippet'>"+item.extract+"</div></article>"
+						$("div#result").append(article);
+
+						$("div#main input").blur();
+						$('div#main div#result').find("article:first").focus()
+						window_stat = "article"
+		
+					 });		
+						
 				}
-			}
 
+		}
 
+			
 
+		if (xhttp.status === 404) 
+		{
+			alert("Url not found");
+		}
+
+		////Redirection
+		if (xhttp.status === 301) 
+		{
+		
+		}
 
 	};
 
 
 
-	xhttp.onerror = function () {
-	alert("status: "+xhttp.status);
+	xhttp.onerror = function () 
+	{
+
+		alert("status: "+xhttp.status);
 		
 	};
 
@@ -288,9 +343,9 @@ function sendRequest(search_term)
 
 
 
-	//////////////////////////
-	////KEYPAD TRIGGER////////////
-	/////////////////////////
+//////////////////////////
+////KEYPAD TRIGGER////////////
+/////////////////////////
 function handleKeyDown(evt) 
 
 {	
@@ -299,14 +354,32 @@ function handleKeyDown(evt)
 	{
 		case 'Enter':
 			select_language();
-			sendRequest($("form input").val());
+			if($("input").is(":focus"))
+			{
+				sendRequest($("form input").val(),"search");
+			}
+			if($("article").is(":focus"))
+			{
+				sendRequest($(":focus").data("id"),"article");
+
+			}
 			evt.preventDefault();
 
 		break;
 
 		case 'Backspace':
+		if(window_stat == "main" || window_stat == "finder")
+		{
+			window.close()
+		}
 		
-		
+		if(window_stat == "article")
+		{
+			window_stat = "main"
+			sendRequest($("form input").val(),"search");
+		}
+
+		evt.preventDefault();
 		break; 
 
 		case 'SoftLeft':
@@ -314,12 +387,9 @@ function handleKeyDown(evt)
 		break; 
 
 		case 'SoftRight':
-			showFinder()
+			
 		break; 
-
-
 		
-
 		case 'ArrowDown':
 			nav("+1")
 		break; 

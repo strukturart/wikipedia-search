@@ -5,11 +5,7 @@
     --color-one: black;
     --color-two: yellow;
     --color-three:silver;
-    --color-four:rgb(99,99,99);
-    --color-five:rgb(38,38,38);
-    --color-six:rgb(78,206,144);
-    --color-seven:gainsboro;
- 
+
 }
 *, *:before, *:after 
 {
@@ -154,12 +150,13 @@ div#main
 	background:white;
 	color:black;
 	display:none;
-	max-width:95%;
 	min-width:100%;
 	width:100%;
 	min-height:100%;
 	display:none;
 }
+
+
 
 div#main form input
 {
@@ -178,39 +175,58 @@ div#main form
 div#main div#result article
 {
 	margin:0 0 15px 0;
-	padding:0 20px 0 20px;
-	max-width:95%;
+	padding:0 3px 0 3px;
+	max-width:100%;
 }
+
+div#main div#result article#noresults
+{
+	text-align: center;
+}
+
 
 div#main div#result
 {
-	padding:0 0px 0 20px;
-	max-width:95%;
+	padding:0 0px 0px 0px;
+	max-width:100%;
 }
 
+
+
+
+div#main div#result article:focus
+{
+	background:silver;
+}
+
+div#main div#result article:last-child
+{
+	padding:0 0 30px 0;
+}
 
 
 
 div#main div#bottom-bar
 {
 	position:fixed;
-	top:93vh;
+	top:90vh;
 	background:black;
 	color:white;
 	min-width:100%;
-	padding:0 3px 0 3px;
+	padding:3px 3px 5px 3px;
+	min-height:30px;
 }
 
-div#main div#top-bar
+
+div#main div#bottom-bar div#button-left
 {
-	padding:0 5px 0 0;
+	max-height:10px!important;
+	font-size:0.9rem;
+
 }
 
-div#main div#top-bar div
-{
-	background:black;
-	color:white;
-}
+
+
 
 div#message-box
 {
@@ -227,7 +243,12 @@ div#message-box
 }
 
 
-
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
 
 
 
