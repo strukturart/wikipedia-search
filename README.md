@@ -1,4 +1,5 @@
 ## wikipedia search
+WiWith this app you can browse wikipedia. If you are looking for the official wikipedia app then you can find it [here](https://github.com/wikimedia/wikipedia-kaios).
 
 ![image-1](/images/image-1.png)
 ![image-2](/images/image-2.png)
@@ -23,6 +24,7 @@ With this app you can search within wikipedia
 - Enter submit your search
 - Search-result-list: navigation with the cursor up/down and enter to select the article
 - Article: Backspace to come back to the search-result-list
+- You can use special search filters if you are in input field with the / call
 
 ## To do
 
