@@ -19,18 +19,16 @@ With this app you can search within wikipedia
 
 ## How to use
 
-
 - Soft-Left new search
 - Enter submit your search
 - Search-result-list: navigation with the cursor up/down and enter to select the article
 - Article: Backspace to come back to the search-result-list
-- You can use special search filters if you are in input field with the / call
+- You can use special search filters if you are in input field with / 
+- /random to start an random search
+- /geo to search article close to you
 
 ## To do
-
-- all languages
-- autocomplete 
-
+- geo search
 
 ## Dependencies
 
