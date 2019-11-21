@@ -3,7 +3,8 @@ WiWith this app you can browse wikipedia. If you are looking for the official wi
 
 ![image-1](/images/image-1.png)
 ![image-2](/images/image-2.png)
-![image-2](/images/image-3.png)
+![image-3](/images/image-3.png)
+![image-4](/images/image-4.png)
 
 ## Features
 
@@ -28,7 +29,6 @@ With this app you can search within wikipedia
 - /geo to search article close to you
 
 ## To do
-- geo search
 
 ## Dependencies
 
