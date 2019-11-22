@@ -26,20 +26,11 @@
 	{
 
 		"desktop-notification":{},
-		
 
 
-
-		"device-storage:sdcard": {
-		"description": "Read from sd-card",
-		"access": "readonly"
+		"geolocation": {
+		"description": "Required to show user's location"
 		},
-
-		"open-remote-window":{}, 
-
-		"device-storage:apps":{ "access": "readonly" },
-		"webapps-manage":{ },
-
 
 
 		"spatialnavigation-app-manage": {

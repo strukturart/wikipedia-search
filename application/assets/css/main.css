@@ -99,7 +99,6 @@ div#finder
 	height:100vh;
 	width:100vw;
 	display:none;
-	z-index:100;
 }
 
 
@@ -135,7 +134,13 @@ div#finder ul
 	margin:15px 0 0 0;
 }
 
-
+div#finder form input
+{
+	border:2px solid black;
+	font-size: 1rem;
+	max-width: 90%;
+	padding:3px;
+}
 
 div#intro
 {
@@ -204,6 +209,20 @@ div#main div#result article:last-child
 	padding:0 0 30px 0;
 }
 
+
+
+div#main div#article-page 
+{
+	max-width:100%;
+}
+
+
+div#main div#article-page article
+{
+	margin:0 0 15px 0;
+	padding:0 3px 0 3px;
+	max-width:100%;
+}
 
 
 div#main div#bottom-bar

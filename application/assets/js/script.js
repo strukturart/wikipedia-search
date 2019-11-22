@@ -18,8 +18,19 @@ $(document).ready(function()
 	var window_stat;
 	var items = 0;
 	var lang;
+	var search_filter;
 
 	var request_url;
+
+	var current_lng = 0;
+	var current_lat = 0;
+
+	var last_lang;
+
+//window_stat = main
+//window_stat = page
+//window_stat = language
+
 
 
 ////////////////////
@@ -60,21 +71,115 @@ function notify(param_title,param_text,param_silent) {
 
 }
 
+///////////////////////
+///get geolocation////
+//////////////////////
+
+
+function geoloc()
+{
+
+		var options = {
+		enableHighAccuracy: true,
+		timeout: 50000,
+		maximumAge: 20000
+		};
+
+		function success(pos) 
+		{
+			var crd = pos.coords;
+
+			current_lng = crd.longitude;
+			current_lat = crd.latitude;
+
+			current_lng = current_lng.toFixed(3)
+			current_lat = current_lat.toFixed(3)
+			
+			request_url = "https://"+lang+".wikipedia.org/w/api.php?action=query&list=geosearch&gscoord="+current_lng+"|"+current_lat+"&gsradius=10000&gslimit=5&format=json"
+
+		
+		}
+
+		function error(err) 
+		{
+			alert("Position not found"+err.code+":"+err.message);
+		}
+
+		navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+	
 
 
 
+/////////////////////////////////////
+//////////////////////////////////////
 
-function showFinder()
+
+function showLanguage()
 {
 	$("div#finder").css("display","block")
 	$("div#main").css("display","none")
-	window_stat = "finder"
-	set_tabindex()
+	window_stat = "language"
+	//set_tabindex()
 	pos_focus = 0;
+	$("form input#language-list").focus()
 
 }
 
-showFinder()
+
+showLanguage()
+
+	function getLastLang()
+	{
+
+		last_lang = localStorage.getItem("last_lang")
+		$("form input#language-list").val(last_lang)
+	}
+
+	getLastLang()
+
+
+
+
+
+	var ac_lang = $('#language-list').autocomplete({
+    lookup: countries,
+    minChars:1,
+    triggerSelectOnValidInput: false,
+    showNoSuggestionNotice: true,
+    lookupLimit: 5,
+    
+    onSearchStart: function()
+    {
+    	//alert("search start")
+    	
+    },
+    onSearchError: function (query, jqXHR, textStatus, errorThrown) 
+    {
+    	//alert(query)
+    },
+    onSelect: function (suggestion) {
+      lang = suggestion.data;
+      showMain()
+      localStorage.setItem('last_lang',suggestion.value)
+      $('#language-list').autocomplete('disable');
+      geoloc()
+
+
+    },
+
+    onSearchComplete: function (query, suggestions) {
+      
+        //alert(query.length)
+          
+
+    }
+});
+		
+	
+
+
 
 function showMain()
 {
@@ -85,8 +190,7 @@ function showMain()
 	setTimeout(
 	  function() 
 	  {
-	    	window_stat = "main"
-
+	    window_stat = "main"
 	  }, 1000);
 
 	
@@ -98,77 +202,8 @@ function newsearch()
 	$("form input").focus()
 	$("div#result").empty()
 	pos_focus = 0
-	$("div#bottom-bar div#button-right").text(pos_focus+" / "+items-1)
-
 
 }
-
-
-
-////////////////////////
-//NAVIGATION
-/////////////////////////
-
-
-
-	function nav (move) {
-
-
-		if(move == "+1")
-		{
-			pos_focus++
-
-
-			if(pos_focus <= items)
-			{
-
-				$('li[tabindex='+pos_focus+']').focus()
-				$('article[tabindex='+pos_focus+']').focus()
-				
-   
-			    $('html, body').animate({
-			        scrollTop: $(':focus').offset().top + 'px'
-			    }, 'fast');
-
-			}	
-
-			if(pos_focus > items)
-			{
-				pos_focus = 0;
-				$('li[tabindex=0]').focus()
-				$('article[tabindex=0]').focus()
-			}
-
-
-		}
-
-		if(move == "-1")
-		{
-			pos_focus--
-			if( pos_focus >= 0)
-			{
-				
-				$('li[tabindex='+pos_focus+']').focus()
-				$('article[tabindex='+pos_focus+']').focus()
-
-				$('html, body').animate({
-				scrollTop: $(':focus').offset().top + 'px'
-				}, 'fast');
-
-			}
-
-			if(pos_focus == -1)
-			{
-				pos_focus = items;
-				
-				$('li[tabindex='+pos_focus+']').focus()
-
-			}
-		}
-
-		//$("div#bottom-bar div#button-right").text(pos_focus+" / "+items)
-
-	}
 
 
 
@@ -186,42 +221,112 @@ function set_tabindex()
 
 
 
-////////////////////
-////select/////
-///////////////////
 
-function select_language()
-{
-	if(window_stat == "finder")
-	{
-		var selected_button = $(":focus")[0];
-		lang = selected_button.getAttribute('data-lang');
-		showMain();
+////////////////////////
+//NAVIGATION
+/////////////////////////
+
+
+
+	function nav (move) {
+
+		if(window_stat == "main" || window_stat == "language")
+		{
+			if(move == "+1")
+			{
+				pos_focus++
+
+
+				if(pos_focus <= items)
+				{
+
+					$('li[tabindex='+pos_focus+']').focus()
+					$('article[tabindex='+pos_focus+']').focus()
+					
+	   
+				    $('html, body').animate({
+				        scrollTop: $(':focus').offset().top + 'px'
+				    }, 'fast');
+
+				}	
+
+				if(pos_focus > items)
+				{
+					pos_focus = 0;
+					$('li[tabindex=0]').focus()
+					$('article[tabindex=0]').focus()
+				}
+
+
+			}
+
+			if(move == "-1")
+			{
+				pos_focus--
+				if( pos_focus >= 0)
+				{
+					
+					$('li[tabindex='+pos_focus+']').focus()
+					$('article[tabindex='+pos_focus+']').focus()
+
+					$('html, body').animate({
+					scrollTop: $(':focus').offset().top + 'px'
+					}, 'fast');
+
+				}
+
+				if(pos_focus == -1)
+				{
+					pos_focus = items;
+					
+					$('li[tabindex='+pos_focus+']').focus()
+
+				}
+			}
+		}
+
 	}
-	
-}
 
 
 
 
-$('#search').autocomplete({
-    //lookup: countries,
-    serviceUrl: 'https://gist.githubusercontent.com/mshafrir/2646763/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_hash.json',
-    minChars:1,
-    triggerSelectOnValidInput: false,
-    lookupLimit: 5,
-    onSearchStart: function()
-    {
-    	//alert("search start")
-    },
-    onSearchError: function (query, jqXHR, textStatus, errorThrown) 
-    {
-    	//alert(textStatus)
-    },
-    onSelect: function (suggestion) {
-        //alert('You selected: ' + suggestion.value + ', ' + suggestion.data);
-    }
-});
+
+	var ac = [
+	    { value: '/random', data: 'random' },
+	    { value: '/geo', data: 'geo' }
+	];
+
+	$('#search').autocomplete({
+	    lookup: ac,
+	    minChars:1,
+	    triggerSelectOnValidInput: false,
+	    lookupLimit: 5,
+	    onSearchStart: function()
+	    {
+
+	    },
+
+	    onSearchError: function (query, jqXHR, textStatus, errorThrown) 
+	    {
+	    	//alert(textStatus)
+	    },
+
+		onSelect: function (suggestion) {
+
+		if(suggestion.data == 'random')
+		{
+			sendRequest("","random");
+		}
+
+		if(suggestion.data == 'geo')
+		{
+			sendRequest("","geo");
+		}
+
+
+
+		}
+	});
 
 
 
@@ -231,8 +336,7 @@ $('#search').autocomplete({
 
 function sendRequest(search_term,request_source)
 {
-	if(window_stat == "main")
-	{  
+	
 		if(request_source == "search")
 		{
 			request_url = "https://"+lang+".wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch="+search_term
@@ -245,24 +349,35 @@ function sendRequest(search_term,request_source)
 
 		}
 
-		$("div#result").empty()
+		if(request_source == "random")
+		{
+			request_url = "https://"+lang+".wikipedia.org/w/api.php?action=query&list=random&format=json&rnnamespace=0&rnlimit=3"
+		}
+
+		if(request_source == "geo")
+		{
+			
+			request_url = "https://"+lang+".wikipedia.org/w/api.php?action=query&format=json&list=geosearch&gscoord="+current_lat+"|"+current_lng+"&gsradius=10000&gslimit=5"
+		}
+
  
 		var xhttp = new XMLHttpRequest({ mozSystem: true });
 
 		xhttp.open('GET',request_url,true);
 		xhttp.withCredentials = true;
-		
+
+		//alert(request_url)
 		xhttp.onload = function () 
 		{
 			
 			if (xhttp.readyState === xhttp.DONE && xhttp.status === 200) 
 			{
 				var data = xhttp.response;
-				var obj = jQuery.parseJSON(data);
+				var obj = JSON.parse(data);
 				
 				if(request_source == "search")
 				{
-
+					$("div#result").empty()
 					if(obj.query.searchinfo.totalhits == 0)
 					{
 						var article = "<article id='noresults'>no results</article>";
@@ -283,31 +398,96 @@ function sendRequest(search_term,request_source)
 						items = $("div#result article").length-1
 						pos_focus = 0
 						$("form").hide()
+						window_stat = "main"
 
-						//$("div#bottom-bar div#button-right").text(pos_focus+" / "+items)
 
 					
 					 });
 
 				}
 
-				if(request_source == "article")
+
+
+				if(request_source == "random")
 				{
+
+					
 					var k = -1;
-					$.each(obj.query.pages, function(i, item) {
+					$.each(obj.query.random, function(i, item) {
 						k++
-									
-						var article = "<article><h1>"+item.title+"</h1><div class='snippet'>"+item.extract+"</div></article>"
+						var article = "<article data-id="+item.id+" tabindex="+k+"><h1>"+item.title+"</h1></article>"
 						$("div#result").append(article);
 
 						$("div#main input").blur();
 						$('div#main div#result').find("article:first").focus()
-						window_stat = "article"
-		
+
+
+						items = $("div#result article").length-1
+						pos_focus = 0
+						$("form").hide()
+						window_stat = "main"
+
+
+					
+					 });
+
+				}
+
+
+
+				if(request_source == "geo")
+				{
+
+					
+					var k = -1;
+					$.each(obj.query.geosearch, function(i, item) {
+						k++
+						var article = "<article data-id="+item.pageid+" tabindex="+k+"><h1>"+item.title+"</h1><div>Distance: "+item.dist+" km</div></article>"
+						$("div#result").append(article);
+
+						$("div#main input").blur();
+						$('div#main div#result').find("article:first").focus()
+
+
+						items = $("div#result article").length-1
+						pos_focus = 0
+						$("form").hide()
+						window_stat = "main"
+
+
+					
+					 });
+
+				}
+
+
+
+				if(request_source == "article")
+				{
+					var k = -1;
+					$("div#article-page").css("display","block")
+					$("div#result").css("display","none")
+					$("div#article-page").empty()
+
+
+					
+
+					$.each(obj.query.pages, function(i, item) {
+						k++
+						
+						var article = "<article><h1>"+item.title+"</h1><div class='snippet'>"+item.extract+"</div></article>"
+						$("div#article-page").append(article);
+
+						$("div#main input").blur();
+						$('div#main div#article-page').find("article").focus()
+						$(window).scrollTop(0);
+						window_stat = "page"
+						
+
 					 });		
 						
 				}
-
+			}
 		}
 
 			
@@ -320,10 +500,10 @@ function sendRequest(search_term,request_source)
 		////Redirection
 		if (xhttp.status === 301) 
 		{
-		
+			alert("redirection");
 		}
 
-	};
+	
 
 
 
@@ -338,7 +518,7 @@ function sendRequest(search_term,request_source)
 }
 
 
-}
+
 
 
 
@@ -353,30 +533,51 @@ function handleKeyDown(evt)
 	switch (evt.key) 
 	{
 		case 'Enter':
-			select_language();
-			if($("input").is(":focus"))
+			//select_language();
+			if($("form#search-form input").is(":focus"))
 			{
-				sendRequest($("form input").val(),"search");
+				var input_val = $("form#search-form input").val()
+
+				if(input_val == "/random")
+				{
+					sendRequest("","random");
+				}
+
+				else if(input_val == "/geo")
+				{
+					sendRequest("","geo");
+				}
+				else
+				{
+					sendRequest(input_val,"search");
+				}
 			}
-			if($("article").is(":focus"))
+
+			if($("div#result article").is(":focus"))
 			{
 				sendRequest($(":focus").data("id"),"article");
-
 			}
+
+			
 			evt.preventDefault();
 
 		break;
 
 		case 'Backspace':
-		if(window_stat == "main" || window_stat == "finder")
+		if(window_stat == "main" || window_stat == "language")
 		{
 			window.close()
 		}
 		
-		if(window_stat == "article")
+		if(window_stat == "page")
 		{
 			window_stat = "main"
-			sendRequest($("form input").val(),"search");
+			$("div#article-page").css("display","none")
+			$("div#result").css("display","block")
+			$(window).scrollTop(0);
+			pos_focus = 0
+			$('article[tabindex='+pos_focus+']').focus()
+
 		}
 
 		evt.preventDefault();
@@ -384,10 +585,6 @@ function handleKeyDown(evt)
 
 		case 'SoftLeft':
 			newsearch()
-		break; 
-
-		case 'SoftRight':
-			
 		break; 
 		
 		case 'ArrowDown':
@@ -397,10 +594,6 @@ function handleKeyDown(evt)
 		case 'ArrowUp':
 			nav("-1")
 		break; 
-
-		
-
-		
 
 	}
 }
