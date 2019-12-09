@@ -69,22 +69,23 @@ div#wrapper
 	position:relative;
 }
 
+
 /*///////////////////////////
-///HELPER////////////////*/
+///TOAST////////////////*/
 
-
-div#window-status
+div#toast
 {
 	position:fixed;
-	top:10px;
-	left:5px;
+	height:auto;
+	overflow:none;
+	top:-100px;
 	background:black;
-	color:white;
-	z-index: 900;
-	display:none;
+	color: white;
+	z-index:10;
+	min-width: 100%;
+	padding:5px;
 
 }
-
 
 
 /*///////////////////////////
@@ -100,25 +101,6 @@ div#finder
 	width:100vw;
 	display:none;
 }
-
-
-div#finder-error
-{
-	position:absolute;
-	z-index:2;
-	top:50%;
-	left:50%;
-	margin:-7px 0 0 -50px;
-	width:92px;
-	background:black;
-	color:white;
-	font-size:14px;
-	padding:3px;
-	display:none;
-}
-
-
-
 
 
 div#finder li:focus
@@ -142,12 +124,13 @@ div#finder form input
 	padding:3px;
 }
 
-div#intro
+div#finder div#bottom-bar
 {
-	background:black;
-	color:white;
-	display:none;
+	position:fixed;
+	top:230px;
+	font-size: 0.8rem;
 }
+
 
 div#main
 {
@@ -220,7 +203,7 @@ div#main div#article-page
 div#main div#article-page article
 {
 	margin:0 0 15px 0;
-	padding:0 3px 0 3px;
+	padding:0 3px 30px 3px;
 	max-width:100%;
 }
 

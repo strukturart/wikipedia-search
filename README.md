@@ -1,10 +1,9 @@
 ## wikipedia search
-WiWith this app you can browse wikipedia. If you are looking for the official wikipedia app then you can find it [here](https://github.com/wikimedia/wikipedia-kaios).
+With this app you can browse wikipedia. If you are looking for the official wikipedia app then you can find it [here](https://github.com/wikimedia/wikipedia-kaios).
 
-![image-1](/images/image-1.png)
-![image-2](/images/image-2.png)
-![image-3](/images/image-3.png)
-![image-4](/images/image-4.png)
+![image-1](/images/image-11.png)
+![image-2](/images/image-12.png)
+![image-3](/images/image-13.png)
 
 ## Features
 
@@ -45,6 +44,6 @@ With this app you can search within wikipedia
 
 You like the app and you have enough money
 
-[![](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=Q8QLA8CNMWAWG)
+<a href="https://www.buymeacoffee.com/vj6Q8lR" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/lato-orange.png" alt="Buy Me A Coffee" style="height: 25px !important;width: 108px !important;" ></a>
 
 
